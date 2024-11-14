@@ -1,18 +1,15 @@
 import json
 import sys
 import os
-import time
-import tqdm
-import fire    
 from utils.construct_aseq_prompt import make_aseq_prompt
 from models.openai_gpt import OpenAIModel
-from data_collection.category_cluster import ASeqFactory
+import tqdm
+import fire 
 from utmath_eval.data import stream_jsonl
 
-problem_path = r'data/oeis_problem.jsonl'
+problem_path = r'data/UTMath_problem.jsonl'
 save_path = r'data/sample_example/gpt-4o_test.jsonl'
 
-seq_db = ASeqFactory(problem_path)
 
 def RCoT(sequence, first_llm, second_llm, save_path):
     prompt_reasoning = make_aseq_prompt(sequence, turn=1)
@@ -24,7 +21,7 @@ def RCoT(sequence, first_llm, second_llm, save_path):
     msgs.append({'role': 'user', 'content': prompt_coding})
     content, input_tokens_second, output_tokens_second = second_llm.call(msgs)
     msgs.append({'role': 'assistant', 'content': content})
-
+    
     temp_dictionary = {
         'task_id': sequence['task_id'],
         'model': (first_llm.model_name, second_llm.model_name), 
@@ -39,7 +36,6 @@ def RCoT(sequence, first_llm, second_llm, save_path):
         save_file.write(save_line + '\n')
 
     return msgs
-
 
 def entry_point(
     problem_path: str,
@@ -60,10 +56,8 @@ def entry_point(
         except Exception as e:
             print(f'Exception raised in sample {sample["task_id"]}, {e}')
 
-        
 def main():
     fire.Fire(entry_point)
-
+    
 if __name__ == '__main__':
     sys.exit(main())
-

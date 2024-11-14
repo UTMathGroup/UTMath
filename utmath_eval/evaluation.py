@@ -43,7 +43,7 @@ def evaluate_functional_correctness(
     timeout: float = 3.0,
     with_extra_data: bool = True,
     problem_file: str = HUMAN_EVAL,
-    out_file: str = "oeis_eval.jsonl"
+    out_file: str = "utmath_eval.jsonl"
 ):
     """
     Evaluates the functional correctness of generated samples, and writes

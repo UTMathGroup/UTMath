@@ -27,11 +27,6 @@ solution({x3}) == {y3}
 
 """
 
-# 数据范围：
-#Please pay attention to the code structure to avoid issues such as timeouts and memory leaks.
-# 1 <= x <= {max_x}
-#Test time limit:1s
-# 时间限制：1s
 
 def make_aseq_prompt(sequence, turn):
     x1, x2, x3 = sequence['x_list'][0],sequence['x_list'][1],sequence['x_list'][2]
@@ -50,10 +45,10 @@ def make_aseq_prompt(sequence, turn):
     return prompt
 
 if __name__ == '__main__':
-    import sys
-    from data_collection.category_cluster import ASeqFactory
-    aid = sys.argv[1]
-    a_seq_path = r'data/oeis_problem.jsonl'
-    seq_db = ASeqFactory(a_seq_path)
-    sequence = seq_db.get_or_download_a_seq(aid)
-    print(make_aseq_prompt(sequence))
+    import json
+    with open(r'data\UTMath_problem.jsonl','r',encoding='utf-8') as file:
+        for line in file:
+            item = json.loads(line)
+            print(make_aseq_prompt(item,1))
+            print(make_aseq_prompt(item,2))
+            break

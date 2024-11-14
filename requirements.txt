@@ -1,1 +1,4 @@
 fire
+tenacity
+loguru
+openai

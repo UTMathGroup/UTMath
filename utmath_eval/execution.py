@@ -37,7 +37,6 @@ def unsafe_execute(problem, completion, timeout, result, with_extra_data):
         # Construct the check program and run it.
         x_list = problem['x_list']
         y_list = problem['y_list']
-        y_list = eval('['+y_list+']')
         if with_extra_data and problem.get('extra_data'):
             extra_x, extra_y = problem['extra_data']
             x_list += extra_x
