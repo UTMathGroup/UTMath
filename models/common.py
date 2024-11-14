@@ -4,8 +4,6 @@ import threading
 from abc import ABC, abstractmethod
 from loguru import logger
 
-from tenacity import retry, stop_after_attempt, wait_random_exponential
-
 
 # Variables for each process. Since models are singleton objects, their references are copied
 # to each process, but they all point to the same objects. For safe updating costs per process,
@@ -16,16 +14,20 @@ thread_cost.process_cost = 0.0
 thread_cost.process_input_tokens = 0
 thread_cost.process_output_tokens = 0
 
+# the model temperature to use
+# For OpenAI models: this value should be from 0 to 2
+
+MODEL_TEMP: float = 0.0
+MODEL_TOPP: float = 0.9
 
 class Model(ABC):
     def __init__(
         self,
         name: str,
-        cost_per_input: float,
-        cost_per_output: float,
+        cost_per_input: float = 0,
+        cost_per_output: float = 0,
     ):
         self.model_name: str = name
-        # cost stats - zero for local models
         self.cost_per_input: float = cost_per_input
         self.cost_per_output: float = cost_per_output
 
@@ -74,34 +76,3 @@ class Model(ABC):
             + thread_cost.process_output_tokens,
             "total_cost": thread_cost.process_cost,
         }
-
-
-MODEL_HUB = {}
-
-
-def register_model(model: Model):
-    global MODEL_HUB
-    MODEL_HUB[model.model_name] = model
-
-
-def get_all_model_names():
-    return list(MODEL_HUB.keys())
-
-
-# To be set at runtime - the selected model for a run
-SELECTED_MODEL: Model
-
-
-def set_model(model_name: str):
-    global SELECTED_MODEL
-    if model_name not in MODEL_HUB:
-        print(f"Invalid model name: {model_name}")
-        sys.exit(1)
-    SELECTED_MODEL = MODEL_HUB[model_name]
-    SELECTED_MODEL.setup()
-
-
-# the model temperature to use
-# For OpenAI models: this value should be from 0 to 2
-MODEL_TEMP: float = 0.0
-MODEL_TOPP: float = 0.9

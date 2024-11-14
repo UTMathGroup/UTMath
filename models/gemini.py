@@ -66,7 +66,7 @@ class GeminiModel(Model):
         else:
             return content
 
-    @retry(wait=wait_random_exponential(min=30, max=600), stop=stop_after_attempt(3))
+    # @retry(wait=wait_random_exponential(min=1, max=10), stop=stop_after_attempt(3))
     def call(
         self,
         messages: list[dict],
@@ -101,26 +101,22 @@ class GeminiModel(Model):
 
 class GeminiPro(GeminiModel):
     def __init__(self):
-        super().__init__(
-            "gemini/gemini-1.0-pro-002", 0.00000035, 0.00000105
-        )
+        super().__init__("gemini/gemini-1.0-pro-002")
         self.note = "Gemini 1.0 from Google"
 
 
 class GeminiFlash(GeminiModel):
     def __init__(self):
-        super().__init__(
-            "gemini/gemini-1.5-flash", 0.00000035, 0.00000105
-        )
-        self.note = "Gemini 1.0 from Google"
+        super().__init__("gemini/gemini-1.5-flash")
+        self.note = "Gemini 1.5 Flash from Google"
 
 
 class Gemini15Pro(GeminiModel):
     def __init__(self):
         super().__init__(
             "gemini/gemini-1.5-pro-002",
-            0.00000035,
-            0.00000105,
+            0.00000125,
+            0.00000500,
         )
         self.note = "Gemini 1.5 from Google"
 
@@ -128,9 +124,6 @@ class Gemini15Pro(GeminiModel):
 if __name__ == '__main__':
     llm = Gemini15Pro()
     llm.setup()
-    msgs = []
-    # response,input_tokens, output_tokens= llm.call(msgs)
-    # msgs.append({'role': 'assistant', 'content': response})
-    msgs.append({'role': 'user', 'content': 'How dare you?'})
+    msgs = [{'role': 'user', 'content': 'hello?'}]
     print(llm.call(msgs))
-    print(llm.get_overall_exec_stats()) # 获取当前花了多少钱
+    print(llm.get_overall_exec_stats()) 

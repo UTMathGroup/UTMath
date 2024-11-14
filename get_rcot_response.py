@@ -1,19 +1,18 @@
 import json
 import sys
 import os
-from utils.construct_aseq_prompt import make_aseq_prompt
+from utils.construct_aseq_prompt import make_rcot_prompt, make_pot_prompt
 from models.openai_gpt import OpenAIModel
+from models.gemini import Gemini15Pro
 import tqdm
 import fire 
 from utmath_eval.data import stream_jsonl
-
-problem_path = r'data/UTMath_problem.jsonl'
-save_path = r'data/sample_example/gpt-4o_test.jsonl'
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 
 def RCoT(sequence, first_llm, second_llm, save_path):
-    prompt_reasoning = make_aseq_prompt(sequence, turn=1)
-    prompt_coding = make_aseq_prompt(sequence, turn=2)
+    prompt_reasoning = make_rcot_prompt(sequence, turn=1)
+    prompt_coding = make_rcot_prompt(sequence, turn=2)
 
     msgs = [{'role': 'user', 'content': prompt_reasoning}]
     content, input_tokens_first, output_tokens_first = first_llm.call(msgs)
@@ -37,24 +36,64 @@ def RCoT(sequence, first_llm, second_llm, save_path):
 
     return msgs
 
+def PoT(sequence, llm, save_path):
+    prompt = make_pot_prompt(sequence)
+    msgs = [{'role': 'user', 'content': prompt}]
+    content, input_tokens, output_tokens= llm.call(msgs)
+    msgs.append({'role': 'assistant', 'content': content})
+    
+    temp_dictionary = {
+        'task_id': sequence['task_id'],
+        'model': llm.model_name,
+        'input_tokens': input_tokens, 
+        'output_tokens': output_tokens, 
+        'messages': msgs, 
+    }
+    with open(save_path, 'a',encoding='utf-8') as save_file:
+        save_line = json.dumps(temp_dictionary)
+        save_file.write(save_line + '\n')
+
+    return msgs
+
+
 def entry_point(
     problem_path: str,
-    save_path: str,
     model_name: str,
+    save_path: str = None,
+    method: str = 'RCoT',
+    max_workers: int = 100,
 ):
-    llm = OpenAIModel(model_name)
+    # llm = OpenAIModel(model_name)
+    llm = Gemini15Pro()
+    llm.setup()
+
+    if save_path is None:
+        save_path = os.path.join(os.path.dirname(problem_path), f"utmath_response_{model_name}_{method}.jsonl")
+
+    print('Saving to', save_path)
     task_id_done = set()
     if os.path.exists(save_path):
         for item in stream_jsonl(save_path):
             task_id_done.add(item['task_id'])
     
-    for sample in tqdm.tqdm(stream_jsonl(problem_path)):
-        if sample['task_id'] in task_id_done:
-            continue
-        try:
-            RCoT(sample, first_llm=llm, second_llm=llm, save_path=save_path)
-        except Exception as e:
-            print(f'Exception raised in sample {sample["task_id"]}, {e}')
+    with ThreadPoolExecutor(max_workers=max_workers) as executor:
+        futures = []
+        for sample in tqdm.tqdm(stream_jsonl(problem_path)):
+            if sample['task_id'] in task_id_done:
+                continue
+            if method == 'RCoT':
+                futures.append(executor.submit(RCoT, sample, llm, llm, save_path))
+            elif method == 'PoT':
+                futures.append(executor.submit(PoT, sample, llm, save_path))
+            if len(futures) > 10:
+                break
+        
+        for future in tqdm.tqdm(as_completed(futures)):
+            try:
+                future.result()
+            except Exception as e:
+                print(f'Exception raised in sample {sample["task_id"]}, {e}')
+    print(f"The total usage is: \n{llm.get_overall_exec_stats()}")
 
 def main():
     fire.Fire(entry_point)

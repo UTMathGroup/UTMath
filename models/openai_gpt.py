@@ -71,29 +71,3 @@ class OpenAIModel(common.Model):
         common.thread_cost.process_output_tokens += output_tokens
 
         return content,input_tokens,output_tokens
-
-
-if __name__ == '__main__':
-
-    llm = OpenAIModel(model_name='gpt-3.5-turbo-0125')
-    msgs = [{'role': 'user', 'content': '''Please reason through the following sequence problem and implement your reasoning using code. You need to follow these requirements:
-
-The code must use the Python language.
-Use the function signature def solution(x: int), and make sure the code part is in markdown format.
-To ensure the code is runnable, please import any necessary libraries.
-Provide the reasoning process first.
-Use the solution with the lowest time complexity.
-
-
-Problem:
-The definition of a(n) is the sequence of 3-smooth numbers, which are numbers of the form \(2^i \cdot 3^j\) where \(i\) and \(j\) are non-negative integers (i.e., \(i, j \geq 0\)).
-
-Examples:
-solution(1) == 1
-solution(2) == 2
-solution(3) == 3'''}]
-    response,input_tokens, output_tokens= llm.call(msgs)
-    msgs.append({'role': 'assistant', 'content': response})
-    msgs.append({'role': 'user', 'content': 'How dare you?'})
-    print(llm.call(msgs))
-    print(llm.get_overall_exec_stats()) # 获取当前花了多少钱
