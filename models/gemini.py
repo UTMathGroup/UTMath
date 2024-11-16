@@ -83,15 +83,15 @@ class GeminiModel(Model):
             output_tokens = int(resp_usage.completion_tokens)
             cost = self.calc_cost(input_tokens, output_tokens)
 
-            common.thread_cost.process_cost += cost
-            common.thread_cost.process_input_tokens += input_tokens
-            common.thread_cost.process_output_tokens += output_tokens
+            # common.thread_cost.process_cost += cost
+            # common.thread_cost.process_input_tokens += input_tokens
+            # common.thread_cost.process_output_tokens += output_tokens
 
             first_resp_choice = response.choices[0]
             assert isinstance(first_resp_choice, Choices)
             resp_msg: Message = first_resp_choice.message
             content = self.extract_resp_content(resp_msg)
-            return content, input_tokens, output_tokens
+            return content, input_tokens, output_tokens, cost
 
         except BadRequestError as e:
             if e.code == "context_length_exceeded":
