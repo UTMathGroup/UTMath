@@ -19,18 +19,18 @@
 
 
 ## 📄 UTMath
-*UTMath: Math Evaluation with **Unit Test** via Reasoning-to-Coding Thoughts*
+UTMath: Math Evaluation with **Unit Test** via **Reasoning-to-Coding Thoughts**
 
-*UTMath is a rigorous and expansive benchmark designed to evaluate the mathematical reasoning abilities of Large Language Models (LLMs), with an average of 68 test cases per problem to ensure that the model **truly solves the problem** rather than simply memorizing the answers.*
+UTMath is a **cutting-edge** and comprehensive benchmark designed to evaluate the mathematical reasoning abilities of Large Language Models. It consists of **1,053 problems**, each with an average of **68 test cases**, ensuring that models **genuinely solve the problems** rather than merely recalling memorized answers
+
 <ul>
     <li><b>⚡️Multiple Case Validation</b>: Instead of using single cases that can be memorized, our questions are sequence-based, allowing numerous cases for validating true understanding.</li>
-    <li><b>🔧True Reasoning Evaluation</b>: Hard cases and runtime metrics help filter memorization and compare solution efficiency, precisely assessing reasoning abilities.</li>
+    <li><b>🔧General Solution</b>: UTMath requires large models to solve problems by generating code, aiming for general solutions rather than problem-specific ones, reflecting a closer alignment with intelligence.</li>
 </ul>
-
-*The Reasoning-to-Coding of Thoughts (RCoT) approach complements the UTMath Benchmark by encouraging LLMs to engage in explicit reasoning prior to generating code.RCoT significantly improves the efficiency and effectiveness of the solution.*
+ The Reasoning-to-Coding of Thoughts (RCoT) approach complements the UTMath Benchmark by encouraging LLMs to engage in explicit reasoning prior to generating code. RCoT significantly improves the efficiency and effectiveness of the solution, suggesting that it encourages the model to **reason critically and find more efficient solutions**.
 <ul>
-    <li><b>🏆Code Output Evaluation</b>: We require LLMs to output code, focusing on reasoning rather than direct answers, to better reflect their reasoning skills.</li>
-    <li><b>🌐Observation of Reasoning Process</b>: By mandating code implementation, we can observe and validate the LLM's reasoning process, not just the final answer.</li>
+    <li><b>🏆Enhanced Reasoning</b>: Emphasizing reasoning allows large models to focus more on improving the quality of reasoning, thereby delivering higher-quality and more efficient solutions.</li>
+    <li><b>🌐Modularity</b>: By separating reasoning from implementation, it becomes possible to control variables and mitigate the impact of differences in reasoning and coding capabilities across various large models.</li>
 </ul>
 
 
@@ -79,7 +79,25 @@ If you find our work interesting and meaningful, welcome to give a 🌟 to our r
 - The best model, GPT-4o, only solves 26.93\% problem in our benchmark, demonstrate the difficulty of our benchmarks.
 
 ![Leaderboard](./pic/leaderboard.png)
-Pass Rate and Average Run Time of LLMs on UTMath. We listed the performance of eight large models using PoT(Program of Thoughts) and RCoT methods across a range of metrics. The average run time is calculated based on the problems solved by the PoT or RCoT methods. The efficiency is calculated as: (Avg.Runtime(PoT) - Avg.Runtime(RcoT)) / Avg.Runtime(RcoT).
+Pass Rate and Average Run Time of LLMs on UTMath. We listed the performance of eight large models using PoT(Program of Thoughts) and RCoT methods across a range of metrics. For o1-mini and o1-preview only Pass@1 data is currently available due to resource constraints. The average run time is calculated based on the problems solved by the PoT or RCoT methods. The efficiency is calculated as: (Avg.Runtime(PoT) - Avg.Runtime(RcoT)) / Avg.Runtime(RcoT).
+
+## 🚠 Generation Pipeline
+-The benchmark comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
+
+![Leaderboard](./pic/Benchmark_Construction.png)
+UTMath generation pipeline.After downloading 23,238 Principle Sequences from OEIS and cleaning the data, 1,053 usable sequences were obtained. Descriptions were standardized by adding background information and improving readability (highlighted in green). Hard cases were introduced to enhance discriminative capability, including terms from later positions to prevent simplistic algorithms from passing.
+
+## 📋 Dataset Statistics
+UTMath comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
+
+![Leaderboard](./pic/Dataset_Statistics.png)
+Comparison between UTMath and other benchmarks. UTMath offers a cutting-edge benchmark with a comprehensive set of 1,053 problems across multiple mathematical domains, providing a more accurate evaluation of LLMs' mathematical reasoning capabilities.
+
+## 📖 Case Study
+This is a qualitative analysis case study of UTMath and RCoT.
+
+![Leaderboard](./pic/Case_Study.png)
+GPT-4o solves UTMath_948 by the PoT method, by the RCoT method, respectively. PoT simply performs brute-force solving, while RCoT involves deeper reasoning through Case merging after a classification discussion and the application of Euler's formula, providing a solution with lower time complexity.
 
 ## 😎 Some interesting findings
 We conducted a comprehensive study with 8 LLMs. Some of our key findings are summarized as follows:
