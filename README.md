@@ -27,7 +27,9 @@ UTMath is a **cutting-edge** and comprehensive benchmark designed to evaluate th
     <li><b>⚡️Multiple Case Validation</b>: Instead of using single cases that can be memorized, our questions are sequence-based, allowing numerous cases for validating true understanding.</li>
     <li><b>🔧General Solution</b>: UTMath requires large models to solve problems by generating code, aiming for general solutions rather than problem-specific ones, reflecting a closer alignment with intelligence.</li>
 </ul>
+
  The Reasoning-to-Coding of Thoughts (RCoT) approach complements the UTMath Benchmark by encouraging LLMs to engage in explicit reasoning prior to generating code. RCoT significantly improves the efficiency and effectiveness of the solution, suggesting that it encourages the model to **reason critically and find more efficient solutions**.
+ 
 <ul>
     <li><b>🏆Enhanced Reasoning</b>: Emphasizing reasoning allows large models to focus more on improving the quality of reasoning, thereby delivering higher-quality and more efficient solutions.</li>
     <li><b>🌐Modularity</b>: By separating reasoning from implementation, it becomes possible to control variables and mitigate the impact of differences in reasoning and coding capabilities across various large models.</li>
