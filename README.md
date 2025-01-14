@@ -84,19 +84,19 @@ If you find our work interesting and meaningful, welcome to give a 🌟 to our r
 Pass Rate and Average Run Time of LLMs on UTMath. We listed the performance of eight large models using PoT(Program of Thoughts) and RCoT methods across a range of metrics. For o1-mini and o1-preview only Pass@1 data is currently available due to resource constraints. The average run time is calculated based on the problems solved by the PoT or RCoT methods. The efficiency is calculated as: (Avg.Runtime(PoT) - Avg.Runtime(RcoT)) / Avg.Runtime(RcoT).
 
 ## 🚠 Generation Pipeline
--The benchmark comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
+- The benchmark comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
 
 ![Leaderboard](./pic/Benchmark_Construction.png)
-UTMath generation pipeline.After downloading 23,238 Principle Sequences from OEIS and cleaning the data, 1,053 usable sequences were obtained. Descriptions were standardized by adding background information and improving readability (highlighted in green). Hard cases were introduced to enhance discriminative capability, including terms from later positions to prevent simplistic algorithms from passing.
+UTMath generation pipeline. After downloading 23,238 Principle Sequences from OEIS and cleaning the data, 1,053 usable sequences were obtained. Descriptions were standardized by adding background information and improving readability (highlighted in green). Hard cases were introduced to enhance discriminative capability, including terms from later positions to prevent simplistic algorithms from passing.
 
 ## 📋 Dataset Statistics
-UTMath comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
+- UTMath comprises 1,053 cutting-edge problems spanning nine mathematical domains, with an average of 68 test cases per problem.
 
 ![Leaderboard](./pic/Dataset_Statistics.png)
 Comparison between UTMath and other benchmarks. UTMath offers a cutting-edge benchmark with a comprehensive set of 1,053 problems across multiple mathematical domains, providing a more accurate evaluation of LLMs' mathematical reasoning capabilities.
 
 ## 📖 Case Study
-This is a qualitative analysis case study of UTMath and RCoT.
+- This is a qualitative analysis case study of UTMath and RCoT.
 
 ![Leaderboard](./pic/Case_Study.png)
 GPT-4o solves UTMath_948 by the PoT method, by the RCoT method, respectively. PoT simply performs brute-force solving, while RCoT involves deeper reasoning through Case merging after a classification discussion and the application of Euler's formula, providing a solution with lower time complexity.
